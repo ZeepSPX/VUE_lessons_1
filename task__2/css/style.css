@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap");
+
+body {
+	font-family: "Lato";
+	color: #000000;
+	background-color: #ffffff;
+	font-size: 25px;
+}
+
+[class*="__container"] {
+	max-width: 1260px;
+	margin: 0 auto;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.page__one {
+	margin-top: 25px;
+}
+
+.header__container{
+	margin-bottom: 25px;
+}
+
+.head__container {
+	margin-top: 25px;
+}
+.head__title {
+	font-size: 30px;
+}
+.head__subtitle {
+	font-size: 20px;
+}
+
+.head__result-container {
+	display: flex;
+	align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.head__hello {
+	width: 50px;
+	height: 50px;
+	background-color: #000000;
+	color: yellow;
+	margin: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.page__list{
+	margin: 25px;
+}
+
+.page__list li{
+	padding: 15px;
+}
+
+input {
+	width: 200px;
+	height: 30px;
+	border: none;
+	background-color: #ccc;
+	padding: 10px;
+	font-size: 16px;
+	color: black;
+}
+
+.page__custom-button{
+		background-color: #3498db; 
+		color: #fff; 
+		padding: 10px 20px; 
+		border: none; 
+		border-radius: 5px; 
+		cursor: pointer; 
+		font-size: 16px; 
+		margin-top: 25px;
+		margin-bottom: 25px;
+}

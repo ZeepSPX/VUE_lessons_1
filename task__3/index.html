@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://unpkg.com/vue@3.3.4/dist/vue.global.js"></script>
+	<title>Lesson_1</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<section>
+			<header class="header">
+				<div class="header__container">
+					<div class="header__head head">
+						<div class="head-title">
+							<h1>Завдання 4</h1>
+							<p>1) Спочатку сума дорівнює 0грн. Змінити суму у гривнях можна або зарахуванням на рахунок, або зняттям.
+								2) Сума автоматично переводиться у долари та євро (фіксований курс задається у data).
+								3) можливість зарахувати суму (контролювати, щоб не була від’ємною)
+								4) можливість зняти (щоб не можна зняти більше ніж є на рахунку)
+								5) при виконанні зняття і зарахування коштів вираховувати 3% від суми (відображати кількість відсотків автоматично)
+								
+								При зміні суми :
+								- якщо було зняття, то суму відоражати червоним
+								- якщо було зарахування, то суму відображати зеленим
+								Якщо сума валюти менша за 100 то відображати червоним кольором, інакше - зеленим
+								</p>
+						</div>
+					</div>
+				</div>
+			</header>
+		</section>
+		<section>
+			<main class="page">
+				<div class="page__container">
+					<div class="page__content">
+						<div id="app">
+							<p class="bank-amount" :class="{ 'balance_red': isLastTransactionWithdrawal, 'balance_green': isLastTransactionDeposit }">
+								Сума на рахунку
+								<span>{{ amount.toFixed(2) }}</span>
+								грн.
+							</p>
+							<div class="incoming">
+								<label>Зарахувати на рахунок</label>
+								<input type="number" v-model="incomingSum" @input="getIncomingFee">
+								<button type="button" @click="increaseAmount">Зарахувати</button>
+							</div>
+							
+							<div class="outgoing">
+								<label>Зняти з рахунку</label>
+								<input type="number" v-model="outgoingSum" @input="getOutgoingFee">
+								<button type="button" @click="decreaseAmount">Зняти</button>
+							</div>
+							
+							<p class="fee">Відсотки за обслуговування <span>{{ fee }}</span> грн</p>
+							<hr>
+							<p class="usd-sum" :style="{ color: getBalanceInUsd < 100 ? 'red' : 'green' }">Залишок у доларах: {{ getBalanceInUsd }} $</p>
+							<p class="eur-sum" :style="{ color: getBalanceInEur < 100 ? 'red' : 'green' }">Залишок у євро: {{ getBalanceInEur }} Є</p>
+							<p class="errorMessage" v-if="errorMessage">{{ errorMessage }}</p>
+						</div>
+					
+						<style>
+							.task {
+								padding-top: 20px;
+								width: fit-content;
+								margin: 0px auto;
+								color: #ebebeb99;
+							}
+
+							.task_title {
+								text-align: center;
+								padding: 5px;
+							}
+
+							.task_desc {
+								max-width: 900px;
+								padding: 16px;
+							}
+
+							.bank {
+								margin-top: 50px;
+								padding: 16px;
+								font-size: 1.25rem;
+								line-height: 1.2;
+								display: flex;
+								flex-direction: column;
+								row-gap: 8px;
+								max-width: 450px;
+								margin: 0px auto;
+							}
+
+							input {
+								text-align: center;
+								padding: 8px;
+								max-width: 100px;
+								font-size: 1.25rem;
+							}
+
+							button {
+								padding: 8px;
+								width: 100px;
+							}
+
+							.incoming {
+								display: flex;
+								gap: 8px;
+								align-items: center;
+							}
+
+							.outgoing {
+								display: flex;
+								gap: 8px;
+								align-items: center;
+							}
+
+							.errorMessage {
+								text-transform: uppercase;
+								color: red;
+								text-decoration: underline;
+							}
+
+							.balance_red {
+								color: red
+							}
+
+							.balance_green {
+								color: green
+							}
+						</style>
+					
+						<script>
+							const { createApp } = Vue
+
+							const FEE_RATE = 0.03
+							const USD_RATE = 38
+							const EUR_RATE = 41
+
+							const app = createApp({
+
+								data() {
+									return {
+										amount: 0,
+										incomingSum: null,
+										outgoingSum: null,
+										fee:null,
+										errorMessage: '',
+										isBalanceIncrease: false,
+										percent: 0.03,
+									}
+								},
+
+								methods: {
+									increaseAmount() {
+										if (this.incomingSum > 0) {
+											const deposit = this.incomingSum;
+											this.amount += deposit - this.fee;
+											this.isLastTransactionWithdrawal = false; // Зарахування
+											this.isLastTransactionDeposit = true;
+											this.incomingSum = null;
+											if (!this.isBalanceIncrease) this.isBalanceIncrease = true;
+										} else {
+											this.errorMessage = 'Число не може бути відʼємним';
+										}
+									},
+									decreaseAmount() {
+										if (this.outgoingSum > 0) {
+											if (this.outgoingSum <= this.amount) {
+												const withdrawal = this.outgoingSum;
+												this.amount -= withdrawal;
+												this.amount -= this.fee;
+												this.isLastTransactionWithdrawal = true; // Зняття
+												this.isLastTransactionDeposit = false;
+												this.outgoingSum = null;
+												if (this.isBalanceIncrease) this.isBalanceIncrease = false;
+											} else {
+												this.errorMessage = 'На рахунку не достатньо коштів';
+											}
+										} else {
+											this.errorMessage = 'Число не може бути відʼємним';
+										}
+									},
+									getFee() {
+										const inputValue = parseFloat(this.outgoingSum);
+										if (inputValue > 0) {
+											this.fee = Math.floor(inputValue * this.percent * 100) / 100;
+										} else {
+											this.fee = 0;
+										}
+									},
+									removeErrorMsg() {
+										this.errorMessage = ''
+									},
+								},
+
+								computed: {
+									getIncomingFee() {
+										const inputValue = parseFloat(this.incomingSum);
+										if (inputValue > 0) {
+											this.fee = Math.floor(inputValue * this.percent * 100) / 100;
+										} else {
+											this.fee = 0;
+										}
+									},
+									getOutgoingFee() {
+										const inputValue = parseFloat(this.outgoingSum);
+										if (inputValue > 0) {
+											this.fee = Math.floor(inputValue * this.percent * 100) / 100;
+										} else {
+											this.fee = 0;
+										}
+									},
+									
+									getBalanceInUsd() {
+										return (this.amount / USD_RATE).toFixed(2)
+									},
+									getBalanceInEur() {
+										return (this.amount / EUR_RATE).toFixed(2)
+									},
+									balanceInUsbColor() {
+										return this.getBalanceInUsd < 100 ? 'red' : 'green'
+									},
+									balanceInEurColor() {
+										return this.getBalanceInEur < 100 ? 'red' : 'green'
+									},
+								}
+							})
+							app.mount('#app')
+						</script>
+					</div>
+				</div>
+			</main>
+		</section>
+	</div>
+</body>
+
+</html>

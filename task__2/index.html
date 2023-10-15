@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://unpkg.com/vue@3.3.4/dist/vue.global.js"></script>
+	<title>Lesson_1</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<section>
+			<header class="header">
+				<div class="header__container">
+					<div class="header__head head">
+						<div class="head-title">
+							<h1>Завдання 3</h1>
+							<p>Задано початок та кінець діапазону. При натисканні на кнопку випадковим чином генерувати значення з вказаного діапазону та відображати його.</p>
+						</div>
+					</div>
+				</div>
+			</header>
+		</section>
+		<section>
+			<main class="page">
+				<div class="page__container">
+					<div class="page__content">
+						<div id="app">
+							<div>
+								<label>
+									Введіть початок діпазону
+									<input type="number" v-model="startRange" placeholder="Введіть початок діпазону">
+								</label>
+
+								<label>
+									Введіть кінець діапазону
+									<input type="number" v-model="endRange" placeholder="Введіть кінець діапазону">
+								</label>
+
+								<div class="page__button">
+									<button class="page__custom-button" @click="getRandomRange" >Випадкове число</button>
+								</div>
+								
+								<p v-if="randomNumber">Випадкове число: {{randomNumber}}</p>
+							</div>
+						</div>
+
+						<script>
+							const { createApp } = Vue 
+
+							createApp({
+
+								data() {
+									return {
+										startRange: null,
+										endRange: null,
+										randomNumber: null
+									}
+								},
+								
+
+								methods: {
+									getRandomRange() {
+										let min = parseInt(this.startRange)
+										let max = parseInt(this.endRange)
+
+										if(min <= max) {
+											return this.randomNumber = min + Math.floor(Math.random() * (max - min +1))
+										}
+									}
+								}
+							}).mount('#app')
+						</script>
+					</div>
+				</div>
+			</main>
+		</section>
+	</div>
+</body>
+
+</html>

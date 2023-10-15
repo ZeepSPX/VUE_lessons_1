@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://unpkg.com/vue@3.3.4/dist/vue.global.js"></script>
+	<title>Lesson_1</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<section>
+			<header class="header">
+				<div class="header__container">
+					<div class="header__head head">
+						<div class="head-title">
+							<h1>Завдання 1</h1>
+							<p> Вводиться кількість пасажирів. Вивести:
+								скільки потрібно автобусів (кожен автобус на 20 місць)
+								скільки пляшок води (кожному пасажиру 2 пляшки)
+								скільки бутербродів (кожному пасажиру 3 бутерброди)
+								</p>
+						</div>
+					</div>
+				</div>
+			</header>
+		</section>
+		<section>
+			<main class="page">
+				<div class="page__container">
+					<div class="page__content">
+						<div id="app">
+							<div>
+								<label>
+									Пасажири
+									<input type="number" v-model="passengerCount" placeholder="Введіть кількість пасажирів">
+								</label>
+
+								<ul class="page__list">
+									Необхідна кількість:
+									<li>автобусів:{{getBussesNum()}}</li>
+									<li>пляшок з водою:{{getWaterBottleNum()}}</li>
+									<li>бутербродів:{{getSandwichNum()}}</li>
+								</ul>
+							</div>
+						</div>
+
+						<script>
+							const { createApp } = Vue 
+
+							const busValue = 20
+							const waterBottleValue = 2 
+							const sandwichValue = 3
+
+							createApp({
+
+								data() {
+									return {
+										passengerCount: null
+									}
+								},
+
+								methods: {
+									getBussesNum() {
+										return Math.ceil(this.passengerCount / busValue);
+									},
+									getWaterBottleNum() {
+									  return this.passengerCount * waterBottleValue;
+									},
+									getSandwichNum() {
+									  return this.passengerCount * sandwichValue;
+									}
+								}
+							}).mount('#app')
+						</script>
+					</div>
+				</div>
+			</main>
+		</section>
+	</div>
+</body>
+
+</html>

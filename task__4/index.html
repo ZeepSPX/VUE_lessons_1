@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://unpkg.com/vue@3.3.4/dist/vue.global.js"></script>
+	<title>Lesson_1</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<section>
+			<header class="header">
+				<div class="header__container">
+					<div class="header__head head">
+						<div class="head-title">
+							<h1>Завдання 5</h1>
+							<p>Додаток містить масив об’єктів (логін, пароль) --  інсуючі логіни і паролі. Користувач вводить логін і пароль, а програма повідомляє чи може користувач бути авторизованим (чи є він одним з масиву).
+							</p>
+							<p>Для прикладу використайте даний логін і пароль
+								login: admin_new, pass: TyPiOLjIDAvas
+							</p>
+						</div>
+					</div>
+				</div>
+			</header>
+		</section>
+		<section>
+			<main class="page">
+				<div class="page__container">
+					<div class="page__content">
+						<div id="app">
+							<div class="login__users">
+								<label>Login</label>
+								<input type="text" v-model="login">
+							</div>
+							
+							<div class="pass__users">
+								<label>Pass</label>
+								<input type="password" v-model="pass">
+							</div>
+							
+							<p class="errorMessage" v-if="errorMessage">{{ errorMessage }}</p>
+							<button class="page__custom-button" @click="authorizeUser">Увійти</button>
+						</div>
+
+						<script>
+							const { createApp } = Vue
+
+							const userlist= [ {
+								login: 'admin_new',
+								pass: 'TyPiOLjIDAvas'
+							},
+							{
+								login: 'user_group_1',
+								pass: 'afcsa45151'
+							},
+							{
+								login: 'user_GROUP_2',
+								pass: 'AFCPAWKCOMA'
+							},
+							{
+								login: 'User_GROUP_3',
+								pass: 'ocnaincuwa'
+							},
+							{
+								login: 'User_GROuP_4',
+								pass: 'aawOACOmwaCINWD'
+							},
+							{
+								login: 'User_GroUP_5',
+								pass: 'AICNiIWicW'
+							}];
+
+							const app = createApp({
+
+								data() {
+									return {
+										login: '',
+										pass: '',
+										errorMessage: ''
+									}
+								},
+
+								methods: {
+									authorizeUser() {
+										const loginUpperCase = this.login.toUpperCase()
+										const passUpperCase = this.pass.toUpperCase()
+
+										const user = userlist.find(user => user.login.toUpperCase() === loginUpperCase && user.pass.toUpperCase() === passUpperCase)
+										
+										if (user) {
+											this.errorMessage = 'Авторизація успішна'
+										} else {
+											this.errorMessage = 'Невірний логін чи пароль. Спробуйте знову чи зверніться до свого системного адміністратора'
+										}
+									},
+								},
+
+								computed: {
+									
+								}
+							})
+							app.mount('#app')
+						</script>
+					</div>
+				</div>
+			</main>
+		</section>
+	</div>
+</body>
+
+</html>

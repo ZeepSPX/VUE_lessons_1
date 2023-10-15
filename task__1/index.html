@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://unpkg.com/vue@3.3.4/dist/vue.global.js"></script>
+	<title>Lesson_1</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<section>
+			<header class="header">
+				<div class="header__container">
+					<div class="header__head head">
+						<div class="head-title">
+							<h1>Завдання 2</h1>
+							<p>Вводиться номер місяця. Автоматично виводити рекомендований одяг (зима – пальто, літо – шорти ….). Також автоматично виводити зображення з відповідним зображенням лісу (зима – ліс зі снігом, осінь – жовтий ліс, …).</p>
+						</div>
+					</div>
+				</div>
+			</header>
+		</section>
+		<section>
+			<main class="page">
+				<div class="page__container">
+					<div class="page__content">
+						<div id="app">
+							<div>
+								<label>
+									Введіть номери місяця
+									<input type="number" v-model="monthsNumbers" placeholder="Введіть номер місяця" min="1" max="12">
+								</label>
+
+								<ul class="page__list">
+									<li>Одяг:</li>
+									<li v-if="clothes">{{ clothes}}</li>
+								</ul>
+								<img v-if="imageSeason" :src="imageSeason" alt="фото сезону">
+							</div>
+						</div>
+
+						<script>
+							const { createApp } = Vue 
+
+							const seasons = [
+								{
+									monthsNumbers: [1, 2, 12], 
+									clothes: 'Шапка, рукавички, куртка, теплі штани',
+									imageSeason: 'https://as1.ftcdn.net/v2/jpg/01/75/38/26/1000_F_175382669_ZbgeF2zAyJqoSNGT2bv88oRKOvXPiiS7.jpg'
+								},
+								{
+									monthsNumbers: [3, 4, 5], 
+									clothes: 'Шапка, куртка, теплі штани',
+									imageSeason: 'https://as2.ftcdn.net/v2/jpg/05/69/52/77/1000_F_569527778_h4GjfoAvahYU7mA8TnLuduDlgvIKRLP3.jpg'
+								},
+								{
+									monthsNumbers: [6, 7, 8], 
+									clothes: 'панаман, футболка, шорти, сландці',
+									imageSeason: 'https://as1.ftcdn.net/v2/jpg/02/66/10/90/1000_F_266109081_22a0UNlYqLGh3vin77zsPlpINnHC6Bgy.jpg'
+								},
+								{
+									monthsNumbers: [9, 10, 11], 
+									clothes: 'куртка, штани, чоботи',
+									imageSeason: 'https://as2.ftcdn.net/v2/jpg/02/00/54/09/1000_F_200540914_JTdOsfqa6hRMEUJvjroaUXCAVoqAB5PL.jpg'
+								},
+							]
+
+							createApp({
+
+								data() {
+									return {
+										monthsNumbers: null,
+										clothes:'',
+										imageSeason:'' 
+									}
+								},
+								watch: {
+									monthsNumbers: 'getClothes'
+								},
+								methods: {
+									getClothes() {
+									  this.clothes = '';
+									  this.imageSeason = '';
+									  seasons.forEach(season => {
+										if (season.monthsNumbers.includes(this.monthsNumbers)) {
+										  this.clothes = season.clothes;
+										  this.imageSeason = season.imageSeason;
+										}
+									  });
+									}
+								  }
+							}).mount('#app')
+						</script>
+					</div>
+				</div>
+			</main>
+		</section>
+	</div>
+</body>
+
+</html>
